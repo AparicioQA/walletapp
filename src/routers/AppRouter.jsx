@@ -24,19 +24,25 @@ function AppRouter() {
     useEffect(() => {
         async function fetchData() {
 
-            const resp = await walletApi('users/authorization');
-            if (resp.ok) {
-                const user = await resp.json();
+            try {
+                const resp = await walletApi('users/authorization');
+                if (resp.ok) {
+                    const user = await resp.json();
 
-                if (user?.token) {
-                    dispatch(login(user.id, user.username, user.token));
-                    setIsLoggedIn(true);
+                    if (user?.token) {
+                        dispatch(login(user.id, user.username, user.token));
+                        setIsLoggedIn(true);
+                        setcheking(false);
+                    }
+
+                } else {
+                    const respBody = await resp.json();
+                    console.log(respBody);
+                    setIsLoggedIn(false);
                     setcheking(false);
                 }
-
-            } else {
-                setIsLoggedIn(false);
-                setcheking(false);
+            } catch (error) {
+                console.log(error);
             }
         }
 

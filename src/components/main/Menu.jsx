@@ -18,7 +18,6 @@ export const Menu = () => {
     useEffect(() => {
         function handleResize() {
             setWidth(window.innerWidth);
-            setClosed(true);
         }
         handleResize();
         window.addEventListener('resize', handleResize)

@@ -58,6 +58,8 @@ export const startRegisterWithEmailPasswordName = (name, email, password, passwo
                 dispatch(startLoginEmailPassword(user.email, user.password));
             }
             else {
+
+                console.log(await resp.json());
                 throw Error();
             }
 
