@@ -24,8 +24,9 @@ export const Retrieve = () => {
         if (resp.ok) {
             navigate('/auth/login', { replace: true })
         } else {
-            console.log(await resp.json());
-            Swal.fire('Error', 'No se pudo cambiar contraseña, por favor verifique los datos', 'error');
+
+            Swal.fire('Error', 'No se pudo cambiar contraseña, por favor verifique los datos y que la contraseña cumpla con tener' +
+                ' al menos 8 caracteres alfanumericos, una mayúscula, una minúscula y un simbolo', 'error');
         }
     }
 
