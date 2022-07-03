@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AuthInput } from '../AuthInput';
 import { useForm } from '../../hooks/useForm';
 import { SubmitButton } from '../SubmitButton';
@@ -18,6 +18,8 @@ export const Register = () => {
     });
 
     const { name, email, password, password2 } = formValues;
+
+    const [conditionsAcepted, setConditionAcepted] = useState(false);
 
     const handleRegister = (event) => {
         event.preventDefault();
@@ -43,6 +45,11 @@ export const Register = () => {
             Swal.fire('Error', "La contraseña debe de ser de almenos 8 caracteres y debe coincider con la otra.", 'error');
             return false;
 
+        } else if (conditionsAcepted) {
+
+            Swal.fire('Error', "Se deben de aceptar los terminos y condiciones.", 'error');
+            return false;
+
         } else {
             return true;
         }
@@ -61,7 +68,8 @@ export const Register = () => {
                     <AuthInput nameTitle="Confirmar Clave" name='password2' placeHolder='*******' type="password" textValue={password2} handleTextChange={(e) => handleInputChange(e)} />
                     <div>
                         <label htmlFor="termsAndConditions" className=''>
-                            <input type="checkbox" name='termsAndConditions' className='mr-2 h-5 w-5' />
+                            <input type="checkbox" name='termsAndConditions' className='mr-2 h-5 w-5' value={conditionsAcepted}
+                                onClick={() => setConditionAcepted(!conditionsAcepted)} />
                             Acepto los <b className='text-indigo-800'>Terminos y condiciones</b>
                         </label>
                     </div>

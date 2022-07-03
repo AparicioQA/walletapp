@@ -3,24 +3,34 @@ import { AuthInput } from '../AuthInput';
 import { useForm } from '../../hooks/useForm';
 import { SubmitButton } from '../SubmitButton';
 import { Link } from "react-router-dom";
+import walletApi from '../../helpers/walletApi';
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 export const Retrieve = () => {
     const [formValues, handleInputChange] = useForm({
 
-        correo: '',
-        clave: '',
-        claveRepetida: '',
+        email: '',
+        user: '',
+        password: '',
     });
+    let navigate = useNavigate();
+    const { password, email, user } = formValues;
 
-    const { passwordRepeat, email, password } = formValues;
-
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
 
         event.preventDefault();
-        //dispatch(startLoginEmailPassword(email, password));
+        const resp = await walletApi('users/retrieve', 'POST', formValues);
+        if (resp.ok) {
+            navigate('/auth/login', { replace: true })
+        } else {
+            console.log(await resp.json());
+            Swal.fire('Error', 'No se pudo cambiar contraseña, por favor verifique los datos', 'error');
+        }
     }
 
     return (
+
         <div className='flex flex-col h-screen justify-start sm:justify-center'>
 
             <div className='px-4 space-y-2 text-xl mt-5 flex flex-col items-stretch sm:items-center'>
@@ -28,9 +38,9 @@ export const Retrieve = () => {
 
                 <form onSubmit={handleLogin} className='space-y-6 w-screem'>
 
-                    <AuthInput nameTitle="Correo" name='correo' placeHolder='correo@email.com' type="text" textValue={email} handleTextChange={(e) => handleInputChange(e)} />
-                    <AuthInput nameTitle="Clave" name='clave' placeHolder='*******' type="password" textValue={password} handleTextChange={(e) => handleInputChange(e)} />
-                    <AuthInput nameTitle="Digite de nuevo su clave" name='claveRepetida' placeHolder='*******' type="password" textValue={passwordRepeat} handleTextChange={(e) => handleInputChange(e)} />
+                    <AuthInput nameTitle="Correo" name='email' placeHolder='correo@email.com' type="text" textValue={email} handleTextChange={(e) => handleInputChange(e)} />
+                    <AuthInput nameTitle="Usuario" name='user' placeHolder='*******' type="password" textValue={user} handleTextChange={(e) => handleInputChange(e)} />
+                    <AuthInput nameTitle="Digite su nueva contraseña" name='password' placeHolder='*******' type="password" textValue={password} handleTextChange={(e) => handleInputChange(e)} />
 
                     <div className="flex justify-center"><SubmitButton handleSubmit={handleLogin} value='Continuar' /></div>
                     <div className='font-semibold text-base flex justify-center'>
